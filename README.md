@@ -1,49 +1,86 @@
-# Facial Feature Classification — setup and run (VS Code, Windows, NVIDIA GPU)
+# ENGE707 Assessment 3: Facial Feature Classification Challenge
 
-## Files
-| File | What it is |
+**Student:** Manav Sandhu · **Kaggle username:** Manav Sandhu x · **Best public leaderboard score:** 0.9782 (accuracy)
+**Final Kaggle submission file:** `outputs/submission_ens_cnx_e4_e3.csv`
+**Code repository:** https://github.com/manavsandhu555-spec/Kaggle_Comp
+
+Eight-class image classification of cat and dog facial-feature crops (CatEye, DogEye, CatFace, DogFace, CatMouth, DogMouth, CatNose, DogNose) with PyTorch and transfer learning.
+
+## What's included
+
+| File / folder | Purpose |
 |---|---|
-| `facial_feature_classification.ipynb` | The whole pipeline, organised by assessment Task 1–6 |
-| `ffc_lib.py` | Dataset, transforms, models, training / evaluation loops, Grad-CAM (imported by the notebook) |
+| `Facial_Feature_Classification_Report.docx` | Final technical report (Tasks 1–7) |
+| `facial_feature_classification.ipynb` | **Main pipeline:** data exploration, preprocessing, models E1–E4, training, evaluation, first submission, error analysis (Tasks 1–6). Saved with all outputs |
+| `improve_score.ipynb` | **Round 2:** E4 and ensemble predictions, ConvNeXt-Tiny with test-like augmentation, final ensemble submission |
+| `ffc_lib.py` | Reusable code imported by both notebooks: dataset discovery, Dataset class, transforms, models, train/evaluate loops, Grad-CAM |
 | `requirements.txt` | Python packages (PyTorch is installed separately, see below) |
+| `outputs/submission*.csv` | Kaggle submission files (see table below) |
+| `outputs/*.csv`, `outputs/*.json` | Training histories, metrics, splits, classification report, misclassified images |
+| `outputs/figures/` | All figures used in the report |
 
-Keep all three in the **kaggle comp** folder, next to the extracted dataset folder.
+### Kaggle submissions
 
-## 1. One-time setup
-1. Install **Python 3.11 or 3.12** (python.org) and, in VS Code, the **Python** and **Jupyter** extensions.
-2. Make sure the NVIDIA driver is up to date (`nvidia-smi` in a terminal should show your GPU).
-3. In VS Code: *File → Open Folder… → kaggle comp*, then open a terminal (Ctrl + `) and run:
+| File | Model | Validation acc | Public LB |
+|---|---|---|---|
+| `outputs/submission.csv` | E3: EfficientNet-B0 fine-tuned, no augmentation, flip TTA | 0.9960 | 0.9749 |
+| `outputs/submission_effb0_ft.csv` | E4: EfficientNet-B0 + augmentation + label smoothing, flip TTA | 0.9934 | 0.9758 |
+| **`outputs/submission_ens_cnx_e4_e3.csv`** | **Final:** average of ConvNeXt-Tiny + E4 + E3 probabilities | 0.9959 | **0.9782** |
+
+The other `submission_*.csv` files are alternative ensembles that were generated but not submitted.
+
+## 1. Setup (Windows, NVIDIA GPU, VS Code)
+
+1. Install Python 3.11–3.13 and the VS Code **Python** and **Jupyter** extensions. Check that `nvidia-smi` shows your GPU.
+2. Create an environment and install the packages:
 
 ```powershell
 python -m venv .venv
 .venv\Scripts\activate
-# PyTorch with CUDA: copy the exact command from https://pytorch.org/get-started/locally
-# (Stable, Windows, Pip, Python, CUDA). It looks like:
 pip install torch torchvision --index-url https://download.pytorch.org/whl/cu126
 pip install -r requirements.txt
-python -c "import torch; print(torch.__version__, torch.cuda.is_available(), torch.cuda.get_device_name(0))"
+python -c "import torch; print(torch.cuda.is_available())"   # must print True
 ```
-The last line must print `True` and your GPU name. If it prints `False`, you installed the CPU-only build — uninstall torch/torchvision and reinstall with the CUDA command.
 
-If PowerShell blocks `activate`, run `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` once.
+The first cell of the main notebook also installs anything that is missing into the selected kernel.
 
-## 2. Run the notebook
-1. Extract the Kaggle zip inside **kaggle comp** (right-click → *Extract All*). `DATA_DIR` in the config cell points at that folder; the code finds `train/`, `test/` and the sample submission inside it automatically.
-2. Open `facial_feature_classification.ipynb`, click **Select Kernel** (top right) → *Python Environments* → `.venv`.
-3. **Smoke test first:** in the config cell set `QUICK_RUN = True`, then *Run All*. It trains on a tiny subset for 2 epochs (writes to `outputs_quick/`) just to prove everything works.
-4. **Real run:** set `QUICK_RUN = False` and *Run All*. Training checkpoints, learning-curve CSVs, metrics, `submission.csv` and all report figures are written to `outputs/` (figures in `outputs/figures/`).
-   * Want only the main model? Set `RUN_ABLATIONS = False` (trains E4 only).
-   * Already-trained experiments are re-loaded from their checkpoints, so re-running is fast. Set `RETRAIN = True` to train again.
-5. Upload `outputs/submission.csv` to Kaggle (*Submit Prediction*), screenshot the result, and type your score into `KAGGLE_PUBLIC_SCORE` in Section 5.4, then re-run the cells below it.
+3. Download the competition data from Kaggle (ENGE707-2026-S2: Facial Feature Classification Challenge) and extract it into this folder. You should end up with:
+
+```
+enge-707-2026-s-2-cat-and-dog-facial-feature-classification-ch/
+    train/train/*.jpg     (63,660 images)
+    test/test/*.jpg       (29,443 images)
+    train_labels.csv
+    sample_submission.csv
+```
+
+## 2. Reproduce the results
+
+1. Open **`facial_feature_classification.ipynb`**, select the Python kernel and click **Run All** (about 1.5–2 h on a laptop GPU).
+   - Optional smoke test first: set `QUICK_RUN = True` in the config cell (tiny subset, writes to `outputs_quick/`).
+   - `RUN_ABLATIONS = False` trains only the main model (E4).
+   - Finished experiments are re-loaded from their checkpoints; set `RETRAIN = True` to train again.
+   - Writes `outputs/submission.csv`, metrics, checkpoints and figures.
+2. Then open **`improve_score.ipynb`** and click **Run All** (about 45–60 min). It reuses the E3/E4 checkpoints, trains ConvNeXt-Tiny and writes all round-2 submissions, including the final `outputs/submission_ens_cnx_e4_e3.csv`.
+
+Model checkpoints (`*.pt`), test-probability arrays (`*.npy`) and `image_stats.csv` are not included because of their size. They are regenerated by running the notebooks.
+
+## 3. Reproducibility details
+
+- Seed 42 for Python, NumPy, PyTorch and DataLoader workers; deterministic cuDNN.
+- The train/validation split is saved in `outputs/train_split.csv` and `outputs/val_split.csv`; the label encoding is in `outputs/label_map.json`.
+- Environment used: Windows 11, Python 3.13.7, PyTorch 2.14.1 + CUDA 12.6, torchvision 0.29.1, timm 1.0.30, NVIDIA laptop GPU (≥ 8 GB).
+- GPU kernels can still cause tiny run-to-run differences (about ±0.1–0.3% accuracy).
 
 ## Troubleshooting
+
 | Problem | Fix |
 |---|---|
-| `CUDA out of memory` | lower `BATCH_SIZE` to 16 (or `IMG_SIZE` to 192) in the config cell |
-| DataLoader hangs / `BrokenPipeError` / pickling errors | set `NUM_WORKERS = 0` |
-| `IProgress not found` | `pip install ipywidgets`, then restart the kernel |
-| Pretrained weights fail to download | needs internet the first time (timm pulls weights from Hugging Face) |
-| `Could not find labelled training data` | check `DATA_DIR` points at the extracted folder |
+| `CUDA out of memory` | Set `BATCH_SIZE = 32` (main notebook) or `CONVNEXT_BATCH = 16` (round 2) |
+| DataLoader hangs or pickling errors on Windows | Set `NUM_WORKERS = 0` |
+| `IProgress not found` | `pip install ipywidgets` and restart the kernel |
+| Pretrained weights fail to download | Internet is needed the first time (timm downloads from Hugging Face) |
 
-## Reproducibility
-Fixed seed (42) for Python / NumPy / PyTorch / DataLoader workers, deterministic cuDNN, saved train/val split (`outputs/train_split.csv`, `val_split.csv`), saved label map, per-epoch histories and JSON summaries for every experiment. GPU kernels can still give tiny run-to-run differences (±0.1–0.3 % accuracy).
+## Main libraries and models
+
+PyTorch, torchvision, timm (EfficientNet-B0, ConvNeXt-Tiny with ImageNet weights), scikit-learn, pandas, NumPy, Matplotlib, seaborn, Pillow. Full references are in the report.
