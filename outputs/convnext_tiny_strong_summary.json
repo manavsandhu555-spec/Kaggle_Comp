@@ -1,0 +1,14 @@
+{
+  "name": "convnext_tiny_strong",
+  "arch": "convnext_tiny.fb_in22k_ft_in1k",
+  "pretrained": true,
+  "freeze_backbone": false,
+  "params_M": 27.83,
+  "trainable_M": 27.83,
+  "epochs_run": 8,
+  "best_epoch": 5,
+  "best_val_loss": 0.13312900339955855,
+  "best_val_acc": 0.979259957577186,
+  "train_acc_at_best": 0.9648020113136392,
+  "train_minutes": 33.83
+}
