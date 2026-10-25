@@ -1,0 +1,14 @@
+{
+  "name": "effb0_frozen",
+  "arch": "efficientnet_b0",
+  "pretrained": true,
+  "freeze_backbone": true,
+  "params_M": 4.02,
+  "trainable_M": 0.01,
+  "epochs_run": 6,
+  "best_epoch": 5,
+  "best_val_loss": 0.7432727348177944,
+  "best_val_acc": 0.7456987980202687,
+  "train_acc_at_best": 0.7188089622641509,
+  "train_minutes": 9.56
+}

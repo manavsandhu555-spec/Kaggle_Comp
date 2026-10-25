@@ -1,0 +1,14 @@
+{
+  "name": "effb0_ft_noaug",
+  "arch": "efficientnet_b0",
+  "pretrained": true,
+  "freeze_backbone": false,
+  "params_M": 4.02,
+  "trainable_M": 4.02,
+  "epochs_run": 12,
+  "best_epoch": 12,
+  "best_val_loss": 0.015128933623001918,
+  "best_val_acc": 0.9958362793620866,
+  "train_acc_at_best": 0.9998427672955975,
+  "train_minutes": 24.6
+}

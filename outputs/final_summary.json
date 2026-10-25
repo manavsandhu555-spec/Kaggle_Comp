@@ -1,0 +1,58 @@
+{
+  "final_experiment": "effb0_ft_noaug",
+  "arch": "efficientnet_b0",
+  "tta": true,
+  "img_size": 224,
+  "batch_size": 64,
+  "seed": 42,
+  "val_loss": 0.0144,
+  "val_accuracy": 0.996,
+  "val_macro_f1": 0.9961,
+  "kaggle_public_score": null,
+  "top_confusions": [
+    {
+      "true": "CatEye",
+      "predicted": "DogEye",
+      "count": 9,
+      "% of true class": 0.32
+    },
+    {
+      "true": "DogEye",
+      "predicted": "CatEye",
+      "count": 5,
+      "% of true class": 0.22
+    },
+    {
+      "true": "CatNose",
+      "predicted": "CatEye",
+      "count": 5,
+      "% of true class": 0.36
+    },
+    {
+      "true": "CatNose",
+      "predicted": "CatMouth",
+      "count": 4,
+      "% of true class": 0.29
+    },
+    {
+      "true": "CatMouth",
+      "predicted": "CatNose",
+      "count": 3,
+      "% of true class": 0.22
+    }
+  ],
+  "data_quality": {
+    "train_images": 63660,
+    "test_images": 29443,
+    "corrupted": 0,
+    "distinct_sizes": 14347,
+    "non_rgb_images": 0,
+    "very_small_images": 35595,
+    "exact_duplicate_groups_train": 15,
+    "exact_duplicates_conflicting_labels": 0,
+    "train_test_exact_overlap": 0,
+    "near_duplicate_groups_train": 325,
+    "near_duplicate_groups_conflicting": 33,
+    "imbalance_ratio": 2.398
+  }
+}

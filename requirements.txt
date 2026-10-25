@@ -1,0 +1,14 @@
+# Install PyTorch with CUDA FIRST (see README.md), then: pip install -r requirements.txt
+timm>=1.0
+numpy
+pandas
+matplotlib
+seaborn
+scikit-learn
+pillow
+tqdm
+ipykernel
+ipywidgets
+jinja2
+# optional, for submitting from the terminal
+kaggle

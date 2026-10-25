@@ -1,0 +1,16 @@
+# Kaggle data (1 GB) - download from the competition page instead of committing it
+enge-707-2026-s-2-cat-and-dog-facial-feature-classification-ch/
+*.zip
+
+# Large / regenerable training artefacts
+outputs/*.pt
+outputs/*.npy
+outputs/image_stats.csv
+outputs_quick/
+
+# Python / Jupyter / environment clutter
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+venv/

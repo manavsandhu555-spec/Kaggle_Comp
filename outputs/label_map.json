@@ -1,0 +1,10 @@
+{
+  "CatEye": 0,
+  "DogEye": 1,
+  "CatFace": 2,
+  "DogFace": 3,
+  "CatMouth": 4,
+  "DogMouth": 5,
+  "CatNose": 6,
+  "DogNose": 7
+}
